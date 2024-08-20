@@ -15,51 +15,46 @@
 
 <body id="page-top">
     <div id="wrapper">
-        <div class="d-flex flex-column" id="content-wrapper">
-            <div id="content">
-                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
-                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                            <h3 class="text-dark mb-0">Sensor Data&nbsp;</h3>
-                        </div>
-                    </div>
-                </nav>
+        <div id="content-wrapper">
+            <div id="content" style="margin-top:0.5rem;">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-7 col-xl-8">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary fw-bold m-0">Temperature and Humidity</h6>
-                                    
+                    <center>
+                        <div class="row text-center" style="margin:1rem;">
+                            <center>
+                                <div style="margin:0.5rem;">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h6 class="text-primary fw-bold m-0">Temperature and Humidity</h6>
+                                            
+                                        </div>
+                                        <div  class="card-body">
+                                            <div id="container"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div id="container"></div>
+                            </center>
+                            
+                            <div class="col">
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <p>Temperature&nbsp;</p>
+                                    </div>
+                                    <div style="background-color:steelblue; width:30px; padding:10px; height:2px" ></div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div>
+                                        <p>Humidity&nbsp;</p>
+                                    </div>
+                                    <div style="background-color:green; width:30px; padding:10px; height:2px" ></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="d-flex flex-row">
-                                <div>
-                                    <p>Temperature&nbsp;</p>
-                                </div>
-                                <div style="background-color:steelblue; width:30px; padding:10px; height:2px" ></div>
-                            </div>
-                            <div class="d-flex flex-row">
-                                <div>
-                                    <p>Humidity&nbsp;</p>
-                                </div>
-                                <div style="background-color:green; width:30px; padding:10px; height:2px" ></div>
-                            </div>
-                        </div>
-                    </div>
+                    </center>
+                    
                 </div>
             </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
-                </div>
-            </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+            
+        
     </div>
     <script type="module">
         var sensorData = [
@@ -81,8 +76,10 @@
 
         // Set the dimensions and margins of the graph
         var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 700 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+           //make the width and height adjust dynamically
+           
+            width = 480 - margin.left - margin.right,
+            height = 460 - margin.top - margin.bottom;
 
         // Append the svg object to the body of the page
         var svg = d3.select("#container")
@@ -92,6 +89,12 @@
             
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        svg.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", width / 3 + margin.left)
+            .attr("y", height + margin.top + 21)
+            .text("Time");
 
         // Add X axis
         var x = d3.scaleTime()
@@ -110,6 +113,13 @@
         svg.append("g")
           .call(d3.axisLeft(yTemp));
 
+        svg.append("text")
+          .attr("text-anchor", "end")
+          .attr("transform", "rotate(-90)")
+          .attr("y", -margin.left + 20)
+          .attr("x", -height / 2 + margin.top)
+          .text("Temperature");
+
         // Add Y axis for humidity
         var yHumidity = d3.scaleLinear()
           .domain([0, d3.max(sensorData, function(d) { return +d.humidity; })])
@@ -118,6 +128,13 @@
         svg.append("g")
           .attr("transform", "translate(" + width + " ,0)")
           .call(d3.axisRight(yHumidity));
+
+        svg.append("text")
+          .attr("text-anchor", "end")
+          .attr("transform", "rotate(-90)")
+          .attr("y", width + margin.right +2)
+          .attr("x", -height / 2 + margin.top)
+          .text("Humidity");
 
         // Add the temperature line
         svg.append("path")
